@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="description"	content="Data Visualisation Exercise 1"/>
+	<meta name="keywords"		  content="HTML, CSS"/>
+	<meta name="author"			  content="Cheong Wei Chee"/>
+
+	<title>Task 1.2 HTML and CSS Demo Page</title>
+	<!--Insert description of exercise  -->
+
+	<style>
+	body {
+		background-color: rgb(185, 232, 255);
+	}
+	h1   {
+	color: rgb(31, 31, 69);}
+	
+	p    {
+		color: rgba(0, 0, 0, 0.834);
+	}
+	footer{
+		background-color: white;
+	}
+	button{
+		background-color: bisque;
+	}
+	</style>
+
+</head>
+
+<body>
+
+	<h1>Title of Article about Interesting Visualisation</h1>
+	<h2>Author: Cheong Wei Chee</h2>
+	<p>Pets and the Pandemic A report from <i>Animal Medicines Australia </i>(AMA) has found that many Australians took the opportunity to introduce a pet into their household during the pandemic. Their survey indicated that there was a significant increase in the percent of households taking in a new dog, fish or bird. Their research also indicated that pets had a number of positive influences on their lives such as:
+		<ul>
+			<li>companionship</li>
+			<li>better mental health</li>
+			<li>joy and happiness.</li>
+		  </ul>
+		
+	With the increase in pet ownership the AMA are encouraging policy makers to consider the needs of companion animals and their owners when considering rental, strata and body corporate regulations are well as accepting animals in public places and transport.</p>
+
+	<button type="button" onclick="show(this)" value="btn2019">2019</button>
+    <button type="button" onclick="show(this)" value="btn2021">2021</button>
+    <button type="button" onclick="show(this)" value="btn2019-2021">Both</button><br>
+    <img id="img" src="pets2019.png" alt="Pet Owndership in Australia, 2019 vs 2021">
+	<script>
+		function show(id) {
+			var img = document.getElementById("img");
+			var cap = document.getElementById("cap");
+
+  			if (id.value=='btn2019') {
+   				img.src = "pets2019.png";
+				cap.innerHTML = "Figure 1. Show the pet ownership in 2019."
+  			} else if(id.value=='btn2021'){
+    			img.src = "pets2021.png";
+				cap.innerHTML = "Figure 2. Show the pet ownership in 2021.";
+  			} else if (id.value=='btn2019-2021'){
+  				img.src = "pets2019-2021.png";
+				cap.innerHTML = "Figure 3. Comparison of Pets Ownership in 2019 and 2021.";
+  			}
+		}
+    </script>
+		<p id="cap"><b>Figure 1</b>: Show the pet ownership in 2019.</p>
+		<br>
+		<a href="lab1-1.html">Lab1.1 HTML & CSS</a><br>
+		<a href="lab1-3.html">Lab1.3 Drawing SVGs</a>
+	
+		<br><br>
+	<footer>COS30045 Data Visualisation<br>Cheong Wei Chee</footer>
+</body>
+</html>

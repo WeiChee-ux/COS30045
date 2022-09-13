@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="description"	content="Data Visualisation Exercise 1"/>
+        <meta name="keywords"		  content="HTML, CSS"/>
+        <meta name="author"			  content="Cheong Wei Chee"/>
+        <style>
+            body {
+                background-color: rgb(185, 232, 255);
+            }
+            h1   {
+            color: rgb(31, 31, 69);}
+            
+            p    {
+                color: rgba(0, 0, 0, 0.834);
+            }
+            footer{
+                background-color: white;
+            }
+        
+            </style>
+<body>
+    <h1>Drawing shapes with SVG</h1>
+
+    <svg width="500" height="60" style="background-color:slategrey;">
+        <g transform="translate(20,0)">
+            <circle cx="25", cy="25", r="25" fill="cornflowerblue"/>
+            <rect x="50", y="5", width="50", height="50" fill="rgb(100, 149, 237)"/>
+            <ellipse cx="140" cy="30" rx="40" ry="25" fill="rgba(100, 149, 237, 0.5)"/>
+            <Line x1="0" y1="30" x2="180" y2="30" stroke="black" stroke-width="5"/>
+        </g>     
+    </svg>
+    <p>
+        <svg width="500" height="100" style="background-color:slategray;">
+            <g transform="translate(20,0)">
+                <rect x="10" y="10" width="50" height="70" style="fill:rgb(100,149,237)"/>
+                <rect x="65" y="40" width="50" height="40" style="fill:rgb(100,149,237)"/>
+                <rect x="120" y="50" width="50" height="30" style="fill:rgb(100,149,237)"/>
+                <rect x="175" y="70" width="50" height="20" style="fill:rgb(100,149,237)"/>
+                <rect x="230" y="80" width="50" height="5" style="fill:rgb(100,149,237)"/>
+            </g>
+        </svg>
+    </p>
+    <br>
+    <a href="lab1-1.html">Lab1.1 HTML & CSS</a> <br>
+    <a href="lab1-2.html">Lab1.2 Javascript</a>
+    <br>
+    <footer style="color:grey">COS30045 Data Visualisation<br> Cheong Wei Chee</footer>
+</body>
+
+</html>
