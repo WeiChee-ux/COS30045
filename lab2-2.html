@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="description"	content="Data Visualisation Exercise 2.2"/>
+	<meta name="keywords"		  content="HTML, CSS, SVG"/>
+	<meta name="author"			  content="Cheong Wei Chee"/>
+
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+
+	<title>Task 2.2 D3 Drawing with Data - Bar Chart</title>
+	<!-- Use D3 to generate elements on a webpage to create a bar chart from a data set. -->
+
+	<style>
+	h1   {
+	color: rgb(31, 31, 69);}
+	
+	p    {
+		color: rgba(0, 0, 0, 0.834);
+	}
+	footer{
+		background-color: rgb(10, 1, 1);
+        color: white;
+	}
+	</style>
+
+</head>
+
+<body>
+
+    <h1>The D3 Journey starts here...</h1>
+
+    <script>
+        var w = 500;
+        var h = 150;
+        var barPadding = 1;
+
+        var dataset = [14, 5, 26, 23, 9, 20, 12, 17, 10, 4, 9];
+
+        var svg = d3.select("body")
+                    .append("svg")
+                    .attr("width", w)   
+                    .attr("height", h); 
+
+        svg.selectAll("rect")
+            .data(dataset)
+            .enter()            
+            .append("rect")
+            .attr("x", function(d, i) {                
+                return i * (w / dataset.length); 
+            })
+            .attr("y", function(d) {
+                return h - (d * 4);
+            })
+            .attr("width", w / dataset.length - barPadding)
+            .attr("height", function(d) {
+                return d * 4;
+            })
+            .attr("fill", "skyblue");
+
+        svg.selectAll("text")
+            .data(dataset)
+            .enter()
+            .append("text")
+            .text(function(d) {
+                return d;
+            })
+            .attr("x", function(d, i) {
+                return i * (w / dataset.length) + 21;
+            })
+            .attr("y", function(d) {
+                return h - (d * 4) + 15;
+            })
+            .attr("text-anchor", "middle");
+
+    </script>
+
+    <br> <br>
+
+    <a href="lab2-1.html">Lab2.1 Binding Data</a><br>
+	<a href="lab2-3.html">Lab2.3 Scatter Plot</a><br>
+	<a href="lab2-4.html">Lab2.4 Loading Data from CSV</a>
+
+    <br> <br>
+
+	<footer>
+        COS30045 Data Visualisation <br>Cheong Wei Chee</footer>
+
+</body>
+</html>

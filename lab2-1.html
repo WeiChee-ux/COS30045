@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="description"	content="Data Visualisation Exercise 1"/>
+	<meta name="keywords"		  content="Binding Data"/>
+	<meta name="author"			  content="Cheong Wei Chee"/>
+
+	<title>Task 2.1 D3 Data Binding</title>
+	<!--Insert description of exercise  -->
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+
+</head>
+
+<style>
+	h1   {
+	color: rgb(31, 31, 69);}
+	
+	p    {
+		color: rgba(0, 0, 0, 0.834);
+	}
+	footer{
+		background-color: rgb(10, 1, 1);
+	}
+	</style>
+<body>
+
+	<h1>The D3 Journey starts here...</h1>
+
+    <script>
+	var dataset = [14, 5, 26, 23, 9];
+
+        d3.select("body").selectAll("p")
+		.data(dataset)
+		.enter()
+        .append("p")
+		.style('color', function(d){
+			return d > 10 ? "red" : "black";
+		})
+		.text(function(d){
+			if (d > 10)
+			{
+				return "Warning: Joe watched " + d +" cat video today.";
+			}
+			else{
+				return "Joe watched " + d + " cat videos today.";}
+		});
+		
+
+		console.log(d3.selectAll("p"));
+        
+    </script>
+
+<a href="lab2-2.html">Lab2.2 Bar Chart</a>
+<br>
+<br>
+	<footer style="color:white">COS30045 Data Visualisation<br>Cheong Wei Chee</footer>
+
+</body>
+</html>
