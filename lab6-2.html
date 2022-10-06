@@ -3,14 +3,14 @@
 
 <head>
 	<meta charset="UTF-8"/>
-	<meta name="description"	content="Data Visualisation Exercise 1"/>
-	<meta name="keywords"		content="HTML, CSS"/>
-	<meta name="author"			content="Your name here"/>
+	<meta name="description"	content="Data Visualisation"/>
+	<meta name="keywords"		  content="HTML, CSS, D3"/>
+	<meta name="author"			  content="Cheong Wei Chee"/>
 
-	<title>Task 5.2 D3 Adding and Removing Values</title>
+	<title>Lab 6.2</title>
 	<!--Insert description of exercise  -->
-	<script src="https://d3js.org/d3.v7.min.js"></script>	
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 
 	<style>
         body {
@@ -30,15 +30,23 @@
         }
         </style>
 </head>
-<body>
-	<h1>D3 Adding and Removing Values</h1>
 
-	<script>
-	var w = 650;
+<body >
+
+    <h1>The D3 Journey starts here...</h1>
+	<button class="btn btn-primary" onclick="add()">Add</button>
+	<button class="btn btn-danger" onclick="remove()">Remove</button>
+	<button class="btn btn-success" onclick="sort()">Sort</button>
+	<p id ="chart1"></p>
+    <script>
+    var w = 650;
 	var h = 250;
-	var barPadding = 2;
+
+	var order=false;
+
 	var dataset = [60, 5, 26, 63, 20, 10, 72, 100, 53, 58,
 					 34, 69, 14, 66, 88, 10, 32, 75, 23, 87];
+	
 	var xScale = d3.scaleBand()
 					.domain(d3.range(dataset.length))
 					.rangeRound([0,w])
@@ -48,7 +56,7 @@
 					.domain([0, d3.max(dataset)])
 					.range([0,h]);
 					
-	var svg = d3.select("body")
+	var svg = d3.select("#chart1")
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
@@ -57,10 +65,34 @@
 		.data(dataset)
 		.enter()
 		.append("rect")
-		.transition()
-		.attr("fill", (d, i) => {
-                return `rgb(0,0,${Math.round(d * 10)})`
-    	})
+		.attr("fill", "slategrey")
+		.on("mouseover", function(event, d){
+			d3.select(this)
+			.attr("fill","orange");
+
+			var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() /2;
+			var yPosition = parseFloat(d3.select(this).attr("y")) + 10;
+
+			svg.append("text")
+		    .attr("id","tooltip")
+			  .attr("x",xPosition)
+			  .attr("y",yPosition)
+			  .attr("text-anchor","middle")
+			  .attr("font-family","sans-serif")
+			  .attr("font-size","11px")
+			  .attr("font-weight","bold")
+			  .attr("fill","black")
+			  .text(d);
+
+		})
+        .on("mouseout", function(){
+			d3.select(this)
+			.transition()
+			  .duration(250)
+			  .attr("fill","slategrey");
+
+			d3.select("#tooltip").remove();
+		})
 		.attr("x", function(d,i){
 			return xScale(i);
 		})
@@ -71,63 +103,119 @@
 		.attr("height", function (d){ 
 			return yScale(d);
 		});
+		
+
+
+	
 
 
 	function add(){
 		var maxValue = 100;
-		var newNumber = Math.floor(Math.random()* maxValue);
-		dataset.push(newNumber);
-		xScale.domain(d3.range(dataset.length));
+		var numValues = dataset.length;
+
+
+
+        var newNumber = Math.floor(Math.random()* maxValue);
+        dataset.push(newNumber);
+
+        xScale.domain(d3.range(dataset.length));
 
 		var bars = svg.selectAll("rect")
-						.data(dataset)
+		              .data(dataset);
+
 
 		bars.enter()
-			.append("rect")
+		    .data(dataset)
+		    .append("rect")
+			.attr("fill", "slategrey")
+			.on("mouseover", function(event, d){
+			              d3.select(this)
+							.attr("fill","orange");
+
+							var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() /2;
+							var yPosition = parseFloat(d3.select(this).attr("y")) + 10;
+
+							svg.append("text")
+							.attr("id","tooltip")
+							.attr("x",xPosition)
+							.attr("y",yPosition)
+							.attr("text-anchor","middle")
+							.attr("font-family","sans-serif")
+							.attr("font-size","11px")
+							.attr("font-weight","bold")
+							.attr("fill","black")
+							.text(d);
+						})
+						.on("mouseout", function(d){
+							d3.select(this)
+							.transition()
+							.duration(250)
+							.attr("fill","slategrey");
+
+							d3.select("#tooltip").remove();
+						})
+			.attr("x",w)
+			.attr("y", function (d){ 
+			return h-yScale(d);
+	     	})
 			.merge(bars)
 			.transition()
 			.duration(500)
 			.attr("x", function(d,i){
-				return xScale(i);
-			})
-			.attr("y", function(d){
-				return h - yScale(d);
-			})
-			.attr("width", xScale.bandwidth())
-			.attr("height", function(d){
-				return yScale(d);
-			})
-			.attr("fill", function(d){
-				return "rgb(0, 0, " + Math.round(d * 10) + ")";
-			});
+			return xScale(i);
+		    })
+		    .attr("y", function (d){ 
+			return h-yScale(d);
+	     	})
+	    	.attr("width", xScale.bandwidth())
+	    	.attr("height", function (d){ 
+			return yScale(d);
+		    })
+;		
+
 	}
 
 	function remove(){
-		// var maxValue = 100;
-		// var numValues = dataset.length;
-		//  dataset = [76,85,23,84,87,33,65];
-		// for (var i = 0; i < numValues; i++){
-		// 	var newNumber = Math.floor(Math.random()* maxValue);
-		// 	dataset.push(newNumber);
-		// }
+		var maxValue = 100;
+		var numValues = dataset.length;
+		
 		dataset.shift();
+		
 
 		var bars = svg.selectAll("rect")
-						.data(dataset)
-		bars.exit()
-			.transition()
-			.duration(500)
-			.attr("x", w)
-			.remove()
-	}
-	</script>
-	
-	<br><br><button class="btn btn-success m-1" onclick="add()">Add</button>
-	<button class="btn btn-danger m-1" onclick="remove()">Remove</button>
+		              .data(dataset)
 
+		bars.exit()
+		    .transition()
+			.duration(500)
+			.attr("x",w)
+			.remove();
+	}
+
+	function sort(){
+
+		order=!order;
+
+			svg.selectAll("rect")
+			   .sort(function(a,b){
+				if(order){
+				  return d3.ascending(a,b);
+				}else{
+					return d3.descending(a,b);
+				}
+			   })
+			   .transition()
+			   .duration(250)
+			   .attr("x", function(d,i){
+				return xScale(i);
+			   });
+
+	}
+
+      </script>
 	<br>
-	<a href="lab5-1.html">Lab5.1 Updates</a><br>
-    <a href="lab5-2.html">Lab5.2 Transitions</a><br>
+	<a href="lab6-1.html">Lab6.1</a><br>
+    <a href="lab6-2.html">Lab6.2</a><br>
     <br> <br>
 
         <footer>
