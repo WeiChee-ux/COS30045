@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="description"	content="Data Visualisation Exercise 1"/>
+	<meta name="keywords"		content="HTML, CSS"/>
+	<meta name="author"			content="Your name here"/>
+
+	<title>Task 5.2 D3 Transitions</title>
+	<!--Insert description of exercise  -->
+	<script src="https://d3js.org/d3.v7.min.js"></script>	
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+
+	<style>
+        body {
+            background-color: rgb(185, 232, 255);
+        }
+        h1   {
+        color: rgb(31, 31, 69);}
+        
+        p    {
+            color: rgba(0, 0, 0, 0.834);
+        }
+        footer{
+            background-color: white;
+        }
+        button{
+            background-color: bisque;
+        }
+        </style>
+</head>
+<body>
+	<h1>D3 Transitions</h1>
+
+	<script>
+	var w = 650;
+	var h = 250;
+	var barPadding = 2;
+	var dataset = [60, 5, 26, 63, 20, 10, 72, 100, 53, 58,
+					 34, 69, 14, 66, 88, 10, 32, 75, 23, 87];
+	
+	var xScale = d3.scaleBand()
+					.domain(d3.range(dataset.length))
+					.rangeRound([0,w])
+					.paddingInner(0.05);
+	
+	var yScale = d3.scaleLinear()
+					.domain([0, d3.max(dataset)])
+					.range([0,h]);
+					
+	var svg = d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+	
+	svg.selectAll("rect")
+		.data(dataset)
+		.enter()
+		.append("rect")
+		.transition()
+		.attr("fill", (d, i) => {
+                return `rgb(0,0,${Math.round(d * 10)})`
+    	})
+		.attr("x", function(d,i){
+			return xScale(i);
+		})
+		.attr("y", function (d){ 
+			return h-yScale(d);
+		})
+		.attr("width", xScale.bandwidth())
+		.attr("height", function (d){ 
+			return yScale(d);
+		});
+
+
+	function update(){
+		var maxValue = 100;
+		var numValues = dataset.length;
+		dataset = [];
+		for (var i = 0; i < numValues; i++){
+			var newNumber = Math.floor(Math.random()* maxValue);
+			dataset.push(newNumber);
+		}
+		svg.selectAll("rect")
+			.data(dataset)
+			.transition()
+			.duration(2000)
+			.delay(function(d,i){
+				return i/dataset.length * 1000;
+			})
+			.ease(d3.easeBounceIn)
+			.attr("y", function (d){ 
+				return h-yScale(d);
+			})
+			.attr("height", function (d){ 
+				return yScale(d);	
+			})
+			.attr("fill", function(d){
+				return "rgb(0, 0, " + Math.round(d * 10) + ")";
+			});
+	}
+
+	function update2(){
+		var maxValue = 100;
+		var numValues = dataset.length;
+		dataset = [];
+		for (var i = 0; i < numValues; i++){
+			var newNumber = Math.floor(Math.random()* maxValue);
+			dataset.push(newNumber);
+		}
+		svg.selectAll("rect")
+			.data(dataset)
+			.transition()
+			.duration(2000)
+			.delay(function(d,i){
+				return i/dataset.length * 1000;
+			})			
+			.ease(d3.easeCircleOut)
+			.attr("y", function (d){ 
+				return h-yScale(d);
+			})
+			.attr("height", function (d){ 
+				return yScale(d);	
+			})
+			.attr("fill", function(d){
+				return "rgb(0, 0, " + Math.round(d * 10) + ")";
+			});
+	}
+
+	function update3(){
+		var maxValue = 100;
+		var numValues = dataset.length;
+		dataset = [];
+		for (var i = 0; i < numValues; i++){
+			var newNumber = Math.floor(Math.random()* maxValue);
+			dataset.push(newNumber);
+		}
+		svg.selectAll("rect")
+			.data(dataset)
+			.transition()
+			.duration(2000)
+			.delay(function(d,i){
+				return i/dataset.length * 1000;
+			})			
+			.ease(d3.easeElasticOut)
+			.attr("y", function (d){ 
+				return h-yScale(d);
+			})
+			.attr("height", function (d){ 
+				return yScale(d);	
+			})
+			.attr("fill", function(d){
+				return "rgb(0, 0, " + Math.round(d * 10) + ")";
+			});
+	}
+	</script>
+	
+	<br><br><button class="btn btn-success m-1" onclick="update()">Update</button>
+	<button class="btn btn-danger m-1" onclick="update2()">Transition 1</button>
+	<button class="btn btn-warning m-1" onclick="update3()">Transition 2</button>
+
+    <br>
+    <a href="lab5-1.html">Lab5.1 Updates</a><br>
+    <a href="lab5-3.html">Lab5.3 Adding and Removing Data</a><br>
+    <br> <br>
+
+        <footer>
+            COS30045 Data Visualisation <br>Cheong Wei Chee
+        </footer>
+    
+    </body>
+    </html>
