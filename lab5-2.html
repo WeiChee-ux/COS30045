@@ -3,25 +3,19 @@
 
 <head>
 	<meta charset="UTF-8"/>
-	<meta name="description"	content="Data Visualisation Exercise 1"/>
+	<meta name="description"	content="Data Visualisation"/>
 	<meta name="keywords"		content="HTML, CSS"/>
 	<meta name="author"			content="Cheong Wei Chee"/>
 
-	<title>Task 5.2 D3 Transitions</title>
-	<!--Insert description of exercise  -->
+	<title>Task 5.1 D3 Updating the data </title>
 	<script src="https://d3js.org/d3.v7.min.js"></script>	
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
-
 	<style>
         body {
             background-color: rgb(185, 232, 255);
         }
         h1   {
-        color: rgb(31, 31, 69);}
-        
-        p    {
-            color: rgba(0, 0, 0, 0.834);
-        }
+        color: rgb(31, 31, 69);
+		}
         footer{
             background-color: white;
         }
@@ -31,7 +25,7 @@
         </style>
 </head>
 <body>
-	<h1>D3 Transitions</h1>
+	<h1>Task 5.2 D3 Transitions</h1>
 
 	<script>
 	var w = 650;
@@ -49,12 +43,12 @@
 					.domain([0, d3.max(dataset)])
 					.range([0,h]);
 					
-	var svg = d3.select("body")
+	var svg1 = d3.select("body")
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
 	
-	svg.selectAll("rect")
+	svg1.selectAll("rect")
 		.data(dataset)
 		.enter()
 		.append("rect")
@@ -82,14 +76,14 @@
 			var newNumber = Math.floor(Math.random()* maxValue);
 			dataset.push(newNumber);
 		}
-		svg.selectAll("rect")
+		svg1.selectAll("rect")
 			.data(dataset)
 			.transition()
-			.duration(2000)
+			.duration(5000)
 			.delay(function(d,i){
 				return i/dataset.length * 1000;
 			})
-			.ease(d3.easeBounceIn)
+			.ease(d3.easeCircleIn)
 			.attr("y", function (d){ 
 				return h-yScale(d);
 			})
@@ -109,14 +103,14 @@
 			var newNumber = Math.floor(Math.random()* maxValue);
 			dataset.push(newNumber);
 		}
-		svg.selectAll("rect")
+		svg1.selectAll("rect")
 			.data(dataset)
 			.transition()
 			.duration(2000)
 			.delay(function(d,i){
 				return i/dataset.length * 1000;
 			})			
-			.ease(d3.easeCircleOut)
+			.ease(d3.easeElasticOut)
 			.attr("y", function (d){ 
 				return h-yScale(d);
 			})
@@ -136,14 +130,14 @@
 			var newNumber = Math.floor(Math.random()* maxValue);
 			dataset.push(newNumber);
 		}
-		svg.selectAll("rect")
+		svg1.selectAll("rect")
 			.data(dataset)
 			.transition()
 			.duration(2000)
 			.delay(function(d,i){
 				return i/dataset.length * 1000;
 			})			
-			.ease(d3.easeElasticOut)
+			.ease(d3.easeCircleOut)
 			.attr("y", function (d){ 
 				return h-yScale(d);
 			})
@@ -156,11 +150,11 @@
 	}
 	</script>
 	
-	<br><br><button class="btn btn-success m-1" onclick="update()">Update</button>
-	<button class="btn btn-danger m-1" onclick="update2()">Transition 1</button>
-	<button class="btn btn-warning m-1" onclick="update3()">Transition 2</button>
+	<br><br><button class="btn-update" onclick="update()">Update</button>
+	<button class="btn-transition1" onclick="update2()">Transition 1</button>
+	<button class="btn-transition2" onclick="update3()">Transition 2</button>
 
-    <br>
+    <br><br>
     <a href="lab5-1.html">Lab5.1 Updates</a><br>
     <a href="lab5-3.html">Lab5.3 Adding and Removing Data</a><br>
     <br> <br>
