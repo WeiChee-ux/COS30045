@@ -26,7 +26,10 @@
 </head>
 <body>
 	<h1>Task 5.2 D3 Transitions</h1>
-
+	<button class="btn-update" onclick="update()">Update</button>
+	<button class="btn-transition1" onclick="transition1()">Transition 1</button>
+	<button class="btn-transition2" onclick="transition2()">Transition 2</button>
+	<br><br>
 	<script>
 	var w = 650;
 	var h = 250;
@@ -95,7 +98,7 @@
 			});
 	}
 
-	function update2(){
+	function transition1(){
 		var maxValue = 100;
 		var numValues = dataset.length;
 		dataset = [];
@@ -122,7 +125,7 @@
 			});
 	}
 
-	function update3(){
+	function transition2(){
 		var maxValue = 100;
 		var numValues = dataset.length;
 		dataset = [];
@@ -149,10 +152,6 @@
 			});
 	}
 	</script>
-	
-	<br><br><button class="btn-update" onclick="update()">Update</button>
-	<button class="btn-transition1" onclick="update2()">Transition 1</button>
-	<button class="btn-transition2" onclick="update3()">Transition 2</button>
 
     <br><br>
     <a href="lab5-1.html">Lab5.1 Updates</a><br>

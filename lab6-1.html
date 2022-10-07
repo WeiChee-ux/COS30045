@@ -7,7 +7,7 @@
 	<meta name="keywords"		  content="HTML, CSS"/>
 	<meta name="author"			  content="Cheong Wei Chee"/>
 
-	<title>Lab 6.1</title>
+	<title>Task 6.1 D3 Interactivity - Mouse Over Effects</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
 	<style>
@@ -17,9 +17,6 @@
         h1   {
         color: rgb(31, 31, 69);}
         
-        p    {
-            color: rgba(0, 0, 0, 0.834);
-        }
         footer{
             background-color: white;
         }
@@ -29,12 +26,12 @@
         </style>
 </head>
 
-<body >
+<body>
 
     <h1>The D3 Journey starts here...</h1>
-	<button class="btn btn-primary" onclick="add()">Add</button>
-	<button class="btn btn-danger" onclick="remove()">Remove</button>
-	<p id ="chart1"></p>
+	<button class="btn-add" onclick="add()">Add</button>
+	<button class="btn-remove" onclick="remove()">Remove</button><br><br>
+
     <script>
     var w = 650;
 	var h = 250;
@@ -51,12 +48,12 @@
 					.domain([0, d3.max(dataset)])
 					.range([0,h]);
 					
-	var svg = d3.select("#chart1")
+	var svg1 = d3.select("body")
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
 	
-	svg.selectAll("rect")
+	svg1.selectAll("rect")
 		.data(dataset)
 		.enter()
 		.append("rect")
@@ -68,18 +65,13 @@
 			var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() /2;
 			var yPosition = parseFloat(d3.select(this).attr("y")) + 10;
 
-			svg.append("text")
+			svg1.append("text")
 		    .attr("id","tooltip")
 			  .attr("x",xPosition)
 			  .attr("y",yPosition)
-			  .attr("text-anchor","middle")
-			  .attr("font-family","sans-serif")
-			  .attr("font-size","11px")
-			  .attr("font-weight","bold")
-			  .attr("fill","black")
 			  .text(d);
-
 		})
+
         .on("mouseout", function(){
 			d3.select(this)
 			.transition()
@@ -98,26 +90,16 @@
 		.attr("height", function (d){ 
 			return yScale(d);
 		});
-		
-
-
-	
-
 
 	function add(){
 		var maxValue = 100;
-		var numValues = dataset.length;
-
-
-
         var newNumber = Math.floor(Math.random()* maxValue);
         dataset.push(newNumber);
 
         xScale.domain(d3.range(dataset.length));
 
-		var bars = svg.selectAll("rect")
+		var bars = svg1.selectAll("rect")
 		              .data(dataset);
-
 
 		bars.enter()
 		    .data(dataset)
@@ -130,15 +112,10 @@
 							var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() /2;
 							var yPosition = parseFloat(d3.select(this).attr("y")) + 10;
 
-							svg.append("text")
+							svg1.append("text")
 							.attr("id","tooltip")
 							.attr("x",xPosition)
 							.attr("y",yPosition)
-							.attr("text-anchor","middle")
-							.attr("font-family","sans-serif")
-							.attr("font-size","11px")
-							.attr("font-weight","bold")
-							.attr("fill","black")
 							.text(d);
 						})
 						.on("mouseout", function(d){
@@ -165,19 +142,14 @@
 	    	.attr("width", xScale.bandwidth())
 	    	.attr("height", function (d){ 
 			return yScale(d);
-		    })
-;		
-
-	}
+		    });		
+}
 
 	function remove(){
 		var maxValue = 100;
-		var numValues = dataset.length;
 		
 		dataset.shift();
-		
-
-		var bars = svg.selectAll("rect")
+		var bars = svg1.selectAll("rect")
 		              .data(dataset)
 
 		bars.exit()
@@ -187,7 +159,7 @@
 			.remove();
 	}
 
-      </script>
+</script>
 	<br>
 	<a href="lab5-1.html">Lab5.1 Updates</a><br>
 	<a href="lab5-2.html">Lab5.2 Transitions</a><br>
