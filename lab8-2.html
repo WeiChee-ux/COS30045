@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="description"	content="Data Visualisation"/>
+	<meta name="keywords"		  content="HTML, CSS, D3"/>
+	<meta name="author"			  content="Cheong Wei Chee"/>
+
+	<title>Task 6.2 D3 Interactivity - Sort </title>
+	<!--Insert description of exercise  -->
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+	<style>
+        body {
+            background-color: rgb(185, 232, 255);
+        }
+        h1   {
+        color: rgb(31, 31, 69);}
+        
+        p    {
+            color: rgba(0, 0, 0, 0.834);
+        }
+        footer{
+            background-color: white;
+        }
+        button{
+            background-color: bisque;
+        }
+        </style>
+</head>
+
+<body >
+
+    <h1>The D3 Journey starts here...</h1>
+	<button class="btn-add" onclick="add()">Add</button>
+	<button class="btn-remove" onclick="remove()">Remove</button>
+	<button class="btn-sort" onclick="sort()">Sort</button><br><br>
+    <script>
+    var w = 650;
+	var h = 250;
+
+	var order=false;
+
+	var dataset = [60, 5, 26, 63, 20, 10, 72, 100, 53, 58,
+					 34, 69, 14, 66, 88, 10, 32, 75, 23, 87];
+	
+	var xScale = d3.scaleBand()
+					.domain(d3.range(dataset.length))
+					.rangeRound([0,w])
+					.paddingInner(0.05);
+	
+	var yScale = d3.scaleLinear()
+					.domain([0, d3.max(dataset)])
+					.range([0,h]);
+					
+	var svg = d3.select("body")
+				.append("svg")
+				.attr("width", w)
+				.attr("height", h);
+	
+	svg.selectAll("rect")
+		.data(dataset)
+		.enter()
+		.append("rect")
+		.attr("fill", "slategrey")
+		.on("mouseover", function(event, d){
+			d3.select(this)
+			.attr("fill","orange");
+
+			var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() /2;
+			var yPosition = parseFloat(d3.select(this).attr("y")) + 10;
+
+			svg.append("text")
+		    .attr("id","tooltip")
+			  .attr("x",xPosition)
+			  .attr("y",yPosition)
+			  .text(d);
+
+		})
+        .on("mouseout", function(){
+			d3.select(this)
+			.transition()
+			  .duration(250)
+			  .attr("fill","slategrey");
+
+			d3.select("#tooltip").remove();
+		})
+		.attr("x", function(d,i){
+			return xScale(i);
+		})
+		.attr("y", function (d){ 
+			return h-yScale(d);
+		})
+		.attr("width", xScale.bandwidth())
+		.attr("height", function (d){ 
+			return yScale(d);
+		});
+
+	function add(){
+		var maxValue = 100;
+
+        var newNumber = Math.floor(Math.random()* maxValue);
+        dataset.push(newNumber);
+
+        xScale.domain(d3.range(dataset.length));
+
+		var bars = svg.selectAll("rect")
+		              .data(dataset);
+
+		bars.enter()
+		    .data(dataset)
+		    .append("rect")
+			.attr("fill", "slategrey")
+			.on("mouseover", function(event, d){
+			              d3.select(this)
+							.attr("fill","orange");
+
+							var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() /2;
+							var yPosition = parseFloat(d3.select(this).attr("y")) + 10;
+
+							svg.append("text")
+							.attr("id","tooltip")
+							.attr("x",xPosition)
+							.attr("y",yPosition)
+							.text(d);
+						})
+						.on("mouseout", function(d){
+							d3.select(this)
+							.transition()
+							.duration(250)
+							.attr("fill","slategrey");
+
+							d3.select("#tooltip").remove();
+						})
+			.attr("x",w)
+			.attr("y", function (d){ 
+			return h-yScale(d);
+	     	})
+			.merge(bars)
+			.transition()
+			.duration(500)
+			.attr("x", function(d,i){
+			return xScale(i);
+		    })
+		    .attr("y", function (d){ 
+			return h-yScale(d);
+	     	})
+	    	.attr("width", xScale.bandwidth())
+	    	.attr("height", function (d){ 
+			return yScale(d);
+		    });
+	}
+
+	function remove(){
+		var maxValue = 100;
+		
+		dataset.shift();
+		var bars = svg.selectAll("rect")
+		              .data(dataset)
+
+		bars.exit()
+		    .transition()
+			.duration(500)
+			.attr("x",w)
+			.remove();
+	}
+
+	function sort(){
+		order=!order;
+
+			svg.selectAll("rect")
+			   .sort(function(a,b){
+				if(order){
+				  return d3.ascending(a,b);
+				}else{
+					return d3.descending(a,b);
+				}
+			   })
+			   .transition()
+			   .duration(250)
+			   .attr("x", function(d,i){
+				return xScale(i);
+			   });
+	}
+
+      </script>
+	<br>
+	<a href="lab5-1.html">Lab5.1 Updates</a><br>
+	<a href="lab5-2.html">Lab5.2 Transitions</a><br>
+	<a href="lab5-3.html">Lab5.3 Adding and Removing Data</a><br>
+	<a href="lab6-1.html">Lab6.1 Interactivity - Mouse Over Effects</a><br>
+
+    <br> <br>
+
+        <footer>
+            COS30045 Data Visualisation <br>Cheong Wei Chee
+        </footer>
+    
+    </body>
+    </html>
