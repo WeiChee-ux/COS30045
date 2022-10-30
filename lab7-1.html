@@ -7,7 +7,7 @@
 	<meta name="keywords"		content="HTML, CSS"/>
 	<meta name="author"			content="Cheong Wei Chee"/>
 
-	<title>Task 5.1 D3 Updating the data </title>
+	<title>Task 7.1 </title>
 	<script src="https://d3js.org/d3.v7.min.js"></script>	
 
 	<style>
@@ -15,79 +15,121 @@
             background-color: rgb(185, 232, 255);
         }
         h1   {
-        color: rgb(31, 31, 69);}
-        
+        color: rgb(31, 31, 69);
+		}
+        .line {
+        fill: none;
+        stroke: red;
+		stroke-width:0.5;
+		stroke-dasharray: 5;
+
+    	}
         footer{
             background-color: white;
         }
-        button{
-            background-color: bisque;
-        }
+		.area{
+					     fill: slategrey;
+						 stroke: slategrey;
+				   }
         </style>
 </head>
 <body>
-	<h1>Task 5.1 D3 Updating the data</h1>
-	<button class="btn-update" onclick="update()">Update</button><br>
+	<h1>Task 7.1 </h1>
+	<p id="chart"></p>
+
 	<script>
-		var w = 650;
-		var h = 250;
-	var barPadding = 2;
-	var dataset = [60, 5, 26, 63, 20, 10, 72, 100, 53, 58,
-					34, 69, 14, 66, 88, 10, 32, 75, 23, 87];
+	var margin = {top: 10, bottom: 20, left: 60, right: 0};
+	var w =600
+	var h =300
+	var padding = 60;
 
-	var xScale = d3.scaleBand()
-					.domain(d3.range(dataset.length))
-					.rangeRound([0,w])
-					.paddingInner(0.05);
+	var dataset
 
-	var yScale = d3.scaleLinear()
-					.domain([0, d3.max(dataset)])
-					.range([0,h]);
-					
-	var svg1 = d3.select("body")
+	d3.csv("Unemployment_78-95.csv", function(d){
+		return {
+			date: new Date(+d.year, +d.month-1),
+			number: +d.number
+		};
+	}).then(function(data){
+		dataset = data;
+		lineChart(dataset);
+		console.table(dataset, ["date","number"]);
+	});
+	
+
+	function lineChart(){
+		xScale = d3.scaleTime()
+					.domain([
+						d3.min(dataset, function(d){return d.date;}),
+						d3.max(dataset, function(d){return d.date;})
+					])
+					.range([0,w]);
+
+		yScale = d3.scaleLinear()
+					.domain([0, d3.max(dataset, function(d){return d.number;})
+					])
+					.range([h,0]);
+		
+		line = d3.line()
+		.defined(function(d){ return d.date >= 1984;})
+					.x(function(d){return xScale(d.date);})
+					.y(function(d){return yScale(d.number);});
+
+		area = d3.area()
+		.defined(function(d){ return d.number >= 0;})
+		         .x(function(d)  { return xScale(d.date); })
+
+				 //base line for area shape
+				 .y0(function()  {return yScale.range()[0];})
+				 .y1(function(d) {return yScale(d.number); });
+
+		var svg = d3.select("#chart")
 					.append("svg")
-					.attr("width", w)
-					.attr("height", h);
+					.attr("width", w+ margin.left + margin.right)
+					.attr("height", h+ margin.top + margin.bottom)
+					.append("g")
+					.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-	svg1.selectAll("rect")
-		.data(dataset)
-		.enter()
-		.append("rect")
-		.attr("fill", (d, i) => {
-				return `rgb(0,0,${Math.round(d * 10)})`
-		})
-		.attr("x", function(d,i){
-			return xScale(i);
-		})
-		.attr("y", function (d){ 
-			return h-yScale(d);
-		})
-		.attr("width", xScale.bandwidth())
-		.attr("height", function (d){ 
-			return yScale(d);
-		});
+		svg.append("path")
+			.datum(dataset)
+			.attr("class", "area")
+			.attr("d", area);
 
+		svg.append("line")
+			.attr("class","line halfMilMark")
+			//start of line
+			.attr("x1", 0)
+			.attr("y1", yScale(500000))
+			//start of line
+			.attr("x2", w)
+			.attr("y2", yScale(500000));
 
-	function update(){
-		var maxValue = 100;
-		var numValues = dataset.length;
-		dataset = [];
-		for (var i = 0; i < numValues; i++){
-			var newNumber = Math.floor(Math.random()* maxValue);
-			dataset.push(newNumber);
-		}
-		svg1.selectAll("rect")
-			.data(dataset)
-			.attr("y", function (d){ 
-				return h-yScale(d);
-			})
-			.attr("height", function (d){ 
-				return yScale(d);	
-			})
-			.attr("fill", function(d){
-				return "rgb(0, 0, " + Math.round(d * 10) + ")";
-			});
-		}
+		svg.append("text")
+			.attr("class", "halfMilLabel")
+			.attr("x", padding + 10)
+			.attr("y", yScale(500000) - 7)
+			.text("Half a million unemployed")
+			.attr("fill", "red");
+		
+		var xAxis = d3.axisBottom()
+                    .scale(xScale);
+    	var yAxis = d3.axisLeft()
+                    .scale(yScale);
+
+		svg.append("g")
+        .attr("transform","translate(0, " + h +")")
+			.call(xAxis);
+
+		svg.append("g")
+		.call(yAxis);
+	
+		svg.append("g")
+			.datum(dataset)
+			.attr("class", "area")
+			.attr("d", area);
+		
+
+	}
 	</script>
     
     <br><br>
