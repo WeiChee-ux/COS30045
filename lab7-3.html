@@ -7,7 +7,7 @@
 	<meta name="keywords"		content="HTML, CSS"/>
 	<meta name="author"			content="Cheong Wei Chee"/>
 
-	<title>Task 5.1 D3 Updating the data </title>
+	<title>Task 7.3</title>
 	<script src="https://d3js.org/d3.v7.min.js"></script>	
 	
 	<style>
@@ -20,103 +20,73 @@
         footer{
             background-color: white;
         }
-        button{
-            background-color: bisque;
-        }
         </style>
 </head>
 <body>
-	<h1>Task 5.3 D3 Adding and Removing Values</h1>
-	<button class="btn-add" onclick="add()">Add</button>
-	<button class="btn-remove" onclick="remove()">Remove</button><br><br>
+	<h1>Task 7.3</h1>
 	<script>
-	var w = 650;
-	var h = 250;
-	var barPadding = 2;
-	var dataset = [60, 5, 26, 63, 20, 10, 72, 100, 53, 58,
-					 34, 69, 14, 66, 88, 10, 32, 75, 23, 87];
-	var xScale = d3.scaleBand()
-					.domain(d3.range(dataset.length))
-					.rangeRound([0,w])
-					.paddingInner(0.05);
+	var w = 300;
+	var h = 300;
+	var dataset = [ { apples: 5, oranges: 10, grapes: 22 }, 
+					{ apples: 4, oranges: 12, grapes: 28 }, 
+					{ apples: 2, oranges: 19, grapes: 32 }, 
+					{ apples: 7, oranges: 23, grapes: 35 }, 
+					{ apples: 23, oranges: 17, grapes: 43 }
+				]; 
+
+	var stack = d3.stack()
+					.keys(["apples","oranges","grapes"]);
+
+	var series = stack(dataset);
 	
-	var yScale = d3.scaleLinear()
-					.domain([0, d3.max(dataset)])
-					.range([0,h]);
-					
-	var svg1 = d3.select("body")
+	var svg = d3.select("body")
 				.append("svg")
 				.attr("width", w)
 				.attr("height", h);
 	
-	svg1.selectAll("rect")
-		.data(dataset)
-		.enter()
-		.append("rect")
-		.transition()
-		.attr("fill", (d, i) => {
-                return `rgb(0,0,${Math.round(d * 10)})`
-    	})
-		.attr("x", function(d,i){
-			return xScale(i);
-		})
-		.attr("y", function (d){ 
-			return h-yScale(d);
-		})
-		.attr("width", xScale.bandwidth())
-		.attr("height", function (d){ 
-			return yScale(d);
-		});
+	var color = d3.scaleOrdinal(d3.schemeCategory10);
 
+	var groups = svg.selectAll("g")
+					.data(series)
+					.enter()
+					.append("g")
+					.style("fill", function(d,i){
+						return color(i); 
+					});
+					
+	var xScale = d3.scaleBand()
+					.domain(d3.range(dataset.length))
+					.rangeRound([0,w])
+					.paddingInner(0.05);
+					
+	var yScale = d3.scaleLinear()
+					.domain([0, d3.max(dataset, function(d){
+						return d.apples + d.oranges + d.grapes;
+					})])
+					.range([h, 0]);
 
-	function add(){
-		var maxValue = 100;
-		var newNumber = Math.floor(Math.random()* maxValue);
-		dataset.push(newNumber);
-		
-		xScale.domain(d3.range(dataset.length));
-
-		var bars = svg1.selectAll("rect")
-						.data(dataset)
-
-		bars.enter()
-			.append("rect")
-			.merge(bars)
-			.transition()
-			.duration(500)
-			.attr("x", function(d,i){
-				return xScale(i);
-			})
-			.attr("y", function(d){
-				return h - yScale(d);
-			})
-			.attr("width", xScale.bandwidth())
-			.attr("height", function(d){
-				return yScale(d);
-			})
-			.attr("fill", function(d){
-				return "rgb(0, 0, " + Math.round(d * 10) + ")";
-			});
-	}
-
-	function remove(){
-		dataset.shift();
-
-		var bars = svg1.selectAll("rect")
-						.data(dataset)
-		bars.exit()
-			.transition()
-			.duration(500)
-			.attr("x", w)
-			.remove()
-	}
+	var rects = groups.selectAll("rect")
+						.data(function(d){ return d;})
+						.enter()
+						.append("rect")
+						.attr("x", function (d, i){
+							return xScale(i);
+						})
+						.attr("y", function(d, i){
+							return yScale(d[1]);
+						})
+						.attr("height", function(d){
+							return yScale(d[0]) - yScale(d[1]);
+						})
+						.attr("width", xScale.bandwidth());
 	</script>
 
-	<br>
-	<a href="lab5-1.html">Lab5.1 Updates</a><br>
-    <a href="lab5-2.html">Lab5.2 Transitions</a><br>
-	<a href="lab6-1.html">Lab6.1 Interactivity - Mouse Over Effects</a><br>
-	<a href="lab6-2.html">Lab6.2 Interactivity - Sort</a><br>
+	<br><br>
+	<a href="lab7-1.html">Lab7.1</a><br>
+	<a href="lab7-2.html">Lab7.2</a><br>
+	<a href="lab7-3.html">Lab7.3</a><br>
+	<a href="lab8-1.html">Lab8.1</a><br>
+	<a href="lab8-2.html">Lab8.2</a><br>
     <br> <br>
 
         <footer>
