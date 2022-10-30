@@ -7,7 +7,7 @@
 	<meta name="keywords"		  content="HTML, CSS"/>
 	<meta name="author"			  content="Cheong Wei Chee"/>
 
-	<title>Task 6.1 D3 Interactivity - Mouse Over Effects</title>
+	<title>Task 8.1</title>
     <script src="https://d3js.org/d3.v7.min.js"></script>
 
 	<style>
@@ -28,143 +28,42 @@
 
 <body>
 
-    <h1>The D3 Journey starts here...</h1>
-	<button class="btn-add" onclick="add()">Add</button>
-	<button class="btn-remove" onclick="remove()">Remove</button><br><br>
+    <h1>Task 8.1</h1>
 
     <script>
-    var w = 650;
-	var h = 250;
+	//width and height
+	var w = 500;
+	var h = 300;
+	var projection = d3.geoMercator()
+						.center([145, -36.5])
+						.translate([w / 2, h / 2])
+						.scale(2450);
 
-	var dataset = [60, 5, 26, 63, 20, 10, 72, 100, 53, 58,
-					 34, 69, 14, 66, 88, 10, 32, 75, 23, 87];
-	
-	var xScale = d3.scaleBand()
-					.domain(d3.range(dataset.length))
-					.rangeRound([0,w])
-					.paddingInner(0.05);
-	
-	var yScale = d3.scaleLinear()
-					.domain([0, d3.max(dataset)])
-					.range([0,h]);
+	var path = d3.geoPath()
+					.projection(projection);
 					
-	var svg1 = d3.select("body")
+	var svg = d3.select("body")
 				.append("svg")
 				.attr("width", w)
-				.attr("height", h);
+				.attr("height", h)
+				.attr("fill", "grey");
 	
-	svg1.selectAll("rect")
-		.data(dataset)
-		.enter()
-		.append("rect")
-		.attr("fill", "slategrey")
-		.on("mouseover", function(event, d){
-			d3.select(this)
-			.attr("fill","orange");
+	d3.json("LGA_VIC.json").then(function(json){
 
-			var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() /2;
-			var yPosition = parseFloat(d3.select(this).attr("y")) + 10;
-
-			svg1.append("text")
-		    .attr("id","tooltip")
-			  .attr("x",xPosition)
-			  .attr("y",yPosition)
-			  .text(d);
-		})
-
-        .on("mouseout", function(){
-			d3.select(this)
-			.transition()
-			  .duration(250)
-			  .attr("fill","slategrey");
-
-			d3.select("#tooltip").remove();
-		})
-		.attr("x", function(d,i){
-			return xScale(i);
-		})
-		.attr("y", function (d){ 
-			return h-yScale(d);
-		})
-		.attr("width", xScale.bandwidth())
-		.attr("height", function (d){ 
-			return yScale(d);
-		});
-
-	function add(){
-		var maxValue = 100;
-        var newNumber = Math.floor(Math.random()* maxValue);
-        dataset.push(newNumber);
-
-        xScale.domain(d3.range(dataset.length));
-
-		var bars = svg1.selectAll("rect")
-		              .data(dataset);
-
-		bars.enter()
-		    .data(dataset)
-		    .append("rect")
-			.attr("fill", "slategrey")
-			.on("mouseover", function(event, d){
-			              d3.select(this)
-							.attr("fill","orange");
-
-							var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.bandwidth() /2;
-							var yPosition = parseFloat(d3.select(this).attr("y")) + 10;
-
-							svg1.append("text")
-							.attr("id","tooltip")
-							.attr("x",xPosition)
-							.attr("y",yPosition)
-							.text(d);
-						})
-						.on("mouseout", function(d){
-							d3.select(this)
-							.transition()
-							.duration(250)
-							.attr("fill","slategrey");
-
-							d3.select("#tooltip").remove();
-						})
-			.attr("x",w)
-			.attr("y", function (d){ 
-			return h-yScale(d);
-	     	})
-			.merge(bars)
-			.transition()
-			.duration(500)
-			.attr("x", function(d,i){
-			return xScale(i);
-		    })
-		    .attr("y", function (d){ 
-			return h-yScale(d);
-	     	})
-	    	.attr("width", xScale.bandwidth())
-	    	.attr("height", function (d){ 
-			return yScale(d);
-		    });		
-}
-
-	function remove(){
-		var maxValue = 100;
-		
-		dataset.shift();
-		var bars = svg1.selectAll("rect")
-		              .data(dataset)
-
-		bars.exit()
-		    .transition()
-			.duration(500)
-			.attr("x",w)
-			.remove();
-	}
+		svg.selectAll("path")
+			.data(json.features)
+			.enter()
+			.append("path")
+			.attr("d", path);
+	});
 
 </script>
 	<br>
-	<a href="lab5-1.html">Lab5.1 Updates</a><br>
-	<a href="lab5-2.html">Lab5.2 Transitions</a><br>
-	<a href="lab5-3.html">Lab5.3 Adding and Removing Data</a><br>
-	<a href="lab6-2.html">Lab6.2 Interactivity - Sort</a><br>
+	<a href="lab7-1.html">Lab7.1</a><br>
+	<a href="lab7-2.html">Lab7.2</a><br>
+	<a href="lab7-3.html">Lab7.3</a><br>
+	<a href="lab8-1.html">Lab8.1</a><br>
+	<a href="lab8-2.html">Lab8.2</a><br>
     <br> <br>
 
         <footer>
